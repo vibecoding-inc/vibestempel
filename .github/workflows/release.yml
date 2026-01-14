@@ -39,7 +39,7 @@ jobs:
         cp app/build/outputs/apk/release/app-release-unsigned.apk release-artifacts/vibestempel-${{ steps.tag_name.outputs.TAG_NAME }}.apk
     
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: release-artifacts/vibestempel-${{ steps.tag_name.outputs.TAG_NAME }}.apk
         body: |
@@ -48,12 +48,17 @@ jobs:
           ### Download
           Download the APK file below to install the app on your Android device.
           
+          ### ⚠️ Important Notes
+          - **This is an unsigned APK** intended for development and testing purposes
+          - You may need to enable "Install from Unknown Sources" in your Android settings
+          - For production use, the APK should be signed with a proper keystore
+          
           ### Installation
           1. Download the APK file
-          2. Enable "Install from Unknown Sources" in your Android settings
+          2. Enable "Install from Unknown Sources" in your Android settings (if not already enabled)
           3. Open the APK file to install
           
-          ### ⚠️ Security Reminder
+          ### 🔒 Security Reminder
           Remember to change the default admin token (`admin123`) before using in production!
           
           See [ADMIN_DOCUMENTATION.md](https://github.com/vibecoding-inc/vibestempel/blob/main/ADMIN_DOCUMENTATION.md) for more details.
