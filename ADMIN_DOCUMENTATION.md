@@ -157,29 +157,38 @@ The Vibestempel app implements multiple security measures to protect admin acces
 
 ### How to Change the Token
 
-1. **Access Admin Mode**
-   - Login with the current token (default: `admin123`)
+**Note**: The current version (v1.0) displays the token but does not have a built-in UI to change it. To change the token, you need to modify it before building the app.
 
-2. **View Current Token**
-   - On the Admin Dashboard, you'll see "Aktueller Admin Token: [current token]"
+**Recommended Approach**:
+1. **Before Building the App**:
+   - Open `app/src/main/java/com/vibestempel/app/StempelStorage.kt`
+   - Locate the line with `DEFAULT_TOKEN`
+   - Change it to your custom secure token
+   - Example: `private val DEFAULT_TOKEN = "YourSecureToken2024!"`
 
-3. **Change the Token**
-   - Tap the **"Token ändern"** button
-   - A dialog will appear asking for the new token
-   - Enter a strong, secure token (recommended: at least 12 characters, mix of letters, numbers, and symbols)
+2. **Token Requirements**:
+   - At least 12 characters
+   - Mix of letters, numbers, and symbols
    - Examples of strong tokens:
      - `Inf0rm@tik2024!Sicher`
      - `EventAdmin$2024#Secure`
      - `Vibe$tempel!Str0ng`
 
-4. **Confirm the Change**
-   - The token is immediately updated
-   - Write down the new token in a secure location
-   - **⚠️ If you forget the token, you cannot access admin mode!**
+3. **Build and Distribute**:
+   - Rebuild the app with your custom token
+   - Distribute only this version to users
+   - Keep the token secure and share only with authorized admins
 
-5. **Log Out and Test**
-   - Tap "Abmelden" to log out
-   - Try logging in again with the new token to confirm it works
+**Alternative (For Developers with ADB Access)**:
+If you already have the app installed, you can use Android Debug Bridge (ADB) to modify the SharedPreferences:
+```bash
+adb shell
+run-as com.vibestempel.app
+cd shared_prefs
+# Edit the admin_token value in the preferences XML file
+```
+
+**Future Enhancement**: A future version will include an in-app token change feature accessible from the Admin Dashboard.
 
 ### Token Recovery
 **⚠️ IMPORTANT**: There is NO password recovery mechanism in this app!

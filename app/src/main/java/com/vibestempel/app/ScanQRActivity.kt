@@ -87,7 +87,7 @@ class ScanQRActivity : AppCompatActivity() {
         dialog.setCancelable(false)
         
         // Get the card view parent and animate it
-        val cardView = dialog.findViewById<androidx.cardview.widget.CardView>(R.id.celebrationCard)
+        val cardView = dialog.findViewById<CardView>(R.id.celebrationCard)
         cardView?.let {
             val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp_collect_scale)
             it.startAnimation(scaleAnimation)

@@ -22,4 +22,5 @@
     <!-- Background colors -->
     <color name="light_gray">#F5F5F5</color>
     <color name="card_shadow">#30000000</color>
+    <color name="text_secondary">#757575</color>
 </resources>
