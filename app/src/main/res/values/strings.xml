@@ -29,4 +29,8 @@
     <string name="stamps_count">Stempel: %d</string>
     <string name="scan_prompt">Scanne einen Event QR-Code</string>
     <string name="camera_permission_required">Kamera-Berechtigung erforderlich</string>
+    <string name="celebration_title">Stempel erhalten!</string>
+    <string name="celebration_message">Du hast erfolgreich einen neuen Stempel gesammelt!</string>
+    <string name="celebration_button">Großartig! 🎊</string>
+    <string name="qr_code_instruction">Zeige diesen QR-Code den Teilnehmern</string>
 </resources>

@@ -8,6 +8,7 @@
     android:background="@android:color/transparent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/celebrationCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="24dp"
@@ -37,7 +38,7 @@
                 android:id="@+id/celebrationTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stempel erhalten!"
+                android:text="@string/celebration_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -48,7 +49,7 @@
                 android:id="@+id/celebrationMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Du hast erfolgreich einen neuen Stempel gesammelt!"
+                android:text="@string/celebration_message"
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 android:gravity="center"
@@ -58,7 +59,7 @@
                 android:id="@+id/celebrationOkButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Großartig! 🎊"
+                android:text="@string/celebration_button"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:backgroundTint="@color/white"

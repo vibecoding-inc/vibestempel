@@ -2,7 +2,7 @@ name: Android CI - Build APK
 
 on:
   push:
-    branches: [ main, develop, copilot/** ]
+    branches: [ main, develop, 'copilot/*' ]
   pull_request:
     branches: [ main, develop ]
 
