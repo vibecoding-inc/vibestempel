@@ -45,7 +45,6 @@ class StampsAdapter : RecyclerView.Adapter<StampsAdapter.StampViewHolder>() {
     inner class StampViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val eventNameText: TextView = itemView.findViewById(R.id.eventNameText)
         private val timestampText: TextView = itemView.findViewById(R.id.timestampText)
-        private val stampCard: CardView = itemView.findViewById(R.id.stampCard)
         
         fun bind(stamp: Stamp) {
             eventNameText.text = stamp.eventName
