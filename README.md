@@ -110,7 +110,13 @@ APK artifacts are available in the Actions tab after each successful build.
 
 ## 📚 Documentation
 
-- **[supabase/SETUP.md](supabase/SETUP.md)**: Supabase database configuration
+- **[DEPLOYMENT.md](DEPLOYMENT.md)**: **NEW!** Complete deployment guide
+  - Supabase setup and configuration
+  - Building and signing the app
+  - Deployment options (Play Store, APK, Firebase)
+  - Production considerations
+  - Monitoring and maintenance
+- **[supabase/SETUP.md](supabase/SETUP.md)**: Detailed Supabase database configuration
 - **[ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md)**: Comprehensive guide for administrators
   - How to use admin mode
   - Security best practices
