@@ -8,10 +8,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Window
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import com.google.android.material.button.MaterialButton
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -93,7 +93,7 @@ class ScanQRActivity : AppCompatActivity() {
             it.startAnimation(scaleAnimation)
         }
         
-        val okButton = dialog.findViewById<Button>(R.id.celebrationOkButton)
+        val okButton = dialog.findViewById<MaterialButton>(R.id.celebrationOkButton)
         okButton.setOnClickListener {
             dialog.dismiss()
             setResult(Activity.RESULT_OK)

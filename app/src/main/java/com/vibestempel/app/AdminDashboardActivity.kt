@@ -3,13 +3,12 @@ package com.vibestempel.app
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.UUID
 
@@ -25,11 +24,11 @@ class AdminDashboardActivity : AppCompatActivity() {
         
         val eventNameInput = findViewById<TextInputEditText>(R.id.eventNameInput)
         val eventDescInput = findViewById<TextInputEditText>(R.id.eventDescInput)
-        val generateButton = findViewById<Button>(R.id.generateButton)
+        val generateButton = findViewById<MaterialButton>(R.id.generateButton)
         val qrCodeCard = findViewById<CardView>(R.id.qrCodeCard)
         val qrCodeImage = findViewById<ImageView>(R.id.qrCodeImage)
         val currentTokenValue = findViewById<TextView>(R.id.currentTokenValue)
-        val logoutButton = findViewById<Button>(R.id.logoutButton)
+        val logoutButton = findViewById<MaterialButton>(R.id.logoutButton)
         
         // Display current admin token
         currentTokenValue.text = storage.getAdminToken()
