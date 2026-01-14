@@ -54,7 +54,7 @@ The repository includes GitHub Actions workflows that automatically:
 - Runs on push to main, develop, and copilot branches
 
 ### Release Workflow
-- Triggers when a tag is created (e.g., `v1.0.0`)
+- Triggers when a tag is created (e.g., `v.1.0.0`)
 - Builds release APK with production Supabase credentials
 - Creates a GitHub **draft** release with the tag name
 - Uploads APK as a downloadable release asset
@@ -66,8 +66,8 @@ The repository includes GitHub Actions workflows that automatically:
 
 To create a new release:
 ```bash
-git tag v1.0.1
-git push origin v1.0.1
+git tag v.1.0.1
+git push origin v.1.0.1
 ```
 
 After the CI workflow completes, the release will be created as a **draft**. You can then:
