@@ -39,11 +39,26 @@ For detailed security information and admin mode usage, see [ADMIN_DOCUMENTATION
 
 ## 🚀 CI/CD
 
-The repository includes GitHub Actions workflow that automatically:
+The repository includes GitHub Actions workflows that automatically:
+
+### Build Workflow
 - Builds debug APK on every push
 - Builds release APK for deployment
 - Uploads APK artifacts for download
 - Runs on push to main, develop, and copilot branches
+
+### Release Workflow
+- Triggers when a tag is created (e.g., `v1.0.0`)
+- Builds release APK
+- Creates a GitHub release with the tag name
+- Uploads APK as a downloadable release asset
+- Includes installation instructions in the release notes
+
+To create a new release, simply push a tag:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## Technical Details
 
