@@ -1,0 +1,13 @@
+# Supabase Configuration
+# Copy this file to local.properties and fill in your actual values
+# DO NOT commit local.properties to git!
+
+# Your Supabase project URL
+supabase.url=https://your-project-id.supabase.co
+
+# Your Supabase anon/public key
+supabase.key=your-anon-key-here
+
+# MCP Server URL (for development, use localhost or your deployed server)
+# For Android emulator, use 10.0.2.2 instead of localhost
+mcp.server.url=http://10.0.2.2:3000/mcp

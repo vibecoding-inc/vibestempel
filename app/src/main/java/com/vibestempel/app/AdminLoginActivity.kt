@@ -9,13 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 
 class AdminLoginActivity : AppCompatActivity() {
     
-    private lateinit var storage: StempelStorage
+    private lateinit var storage: MCPStorage
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_login)
         
-        storage = StempelStorage(this)
+        storage = MCPStorage(this)
         
         val tokenInput = findViewById<EditText>(R.id.tokenInput)
         val loginButton = findViewById<Button>(R.id.loginButton)

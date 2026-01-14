@@ -10,12 +10,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 
 class UserDashboardActivity : AppCompatActivity() {
     
-    private lateinit var storage: StempelStorage
+    private lateinit var storage: MCPStorage
     private lateinit var stampsAdapter: StampsAdapter
     private lateinit var stampsRecyclerView: RecyclerView
     private lateinit var noStampsText: TextView
@@ -43,7 +45,7 @@ class UserDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_dashboard)
         
-        storage = StempelStorage(this)
+        storage = MCPStorage(this)
         
         stampsRecyclerView = findViewById(R.id.stampsRecyclerView)
         noStampsText = findViewById(R.id.noStampsText)
@@ -79,16 +81,27 @@ class UserDashboardActivity : AppCompatActivity() {
     }
     
     private fun updateStampsList() {
-        val stamps = storage.getStamps()
-        stampsCountText.text = getString(R.string.stamps_count, stamps.size)
-        
-        if (stamps.isEmpty()) {
-            stampsRecyclerView.visibility = View.GONE
-            noStampsText.visibility = View.VISIBLE
-        } else {
-            stampsRecyclerView.visibility = View.VISIBLE
-            noStampsText.visibility = View.GONE
-            stampsAdapter.updateStamps(stamps)
+        lifecycleScope.launch {
+            val result = storage.getStamps()
+            if (result.isSuccess) {
+                val stamps = result.getOrDefault(emptyList())
+                stampsCountText.text = getString(R.string.stamps_count, stamps.size)
+                
+                if (stamps.isEmpty()) {
+                    stampsRecyclerView.visibility = View.GONE
+                    noStampsText.visibility = View.VISIBLE
+                } else {
+                    stampsRecyclerView.visibility = View.VISIBLE
+                    noStampsText.visibility = View.GONE
+                    stampsAdapter.updateStamps(stamps)
+                }
+            } else {
+                Toast.makeText(
+                    this@UserDashboardActivity,
+                    "Failed to load stamps: ${result.exceptionOrNull()?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
     

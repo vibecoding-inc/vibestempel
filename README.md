@@ -10,6 +10,8 @@ An Android application for managing stamp collection for first-semester informat
    - Create QR codes for events
    - Generate stamps for student check-ins
    - View current admin token
+   - **NEW**: View realtime user stamp statistics
+   - **NEW**: See live count of stamps per user
    - Beautiful material design interface
 
 2. **User Mode** - No authentication required
@@ -17,6 +19,7 @@ An Android application for managing stamp collection for first-semester informat
    - View collected stamps with stunning animations
    - Track event attendance
    - Celebration animations when collecting stamps
+   - **NEW**: All stamps synced to cloud via Supabase
 
 ### 🎨 Beautiful Design & Animations
 - **Celebration Dialog**: Animated popup when collecting a new stamp
@@ -30,10 +33,13 @@ An Android application for managing stamp collection for first-semester informat
 For detailed security information and admin mode usage, see [ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md).
 
 - Token-based admin authentication
+- **NEW**: Serverside validation via MCP server
+- **NEW**: Supabase Row Level Security (RLS) policies
 - Unique event IDs (UUID) prevent fake QR codes
-- Duplicate stamp prevention
+- Duplicate stamp prevention (serverside)
 - QR code validation
-- Private data storage
+- **NEW**: Device-based user identification
+- **NEW**: Credentials never stored in app
 
 **⚠️ IMPORTANT**: Change the default admin token (`admin123`) before deploying!
 
@@ -49,11 +55,15 @@ The repository includes GitHub Actions workflow that automatically:
 
 - **Platform**: Android (minSdk 24, targetSdk 34)
 - **Language**: Kotlin
-- **Architecture**: Native Android with local storage (SharedPreferences)
+- **Architecture**: Native Android with **Supabase backend via MCP server**
+- **Backend**: Supabase (PostgreSQL + Realtime)
+- **API**: Model Context Protocol (MCP) server
 - **Key Libraries**:
   - ZXing for QR code generation and scanning
   - Material Design Components
   - AndroidX libraries
+  - Kotlin Coroutines for async operations
+  - Supabase Realtime for live updates
 
 ## Building the App
 
@@ -61,12 +71,22 @@ The repository includes GitHub Actions workflow that automatically:
 - Android Studio Arctic Fox or later
 - JDK 17 or later
 - Android SDK with API 34
+- **Supabase project** (see setup below)
+- **MCP server running** (see setup below)
+
+### Supabase Backend Setup
+
+1. **Create Supabase Project**: Follow [`supabase/SETUP.md`](supabase/SETUP.md)
+2. **Deploy MCP Server**: Follow [`MCP_INTEGRATION.md`](MCP_INTEGRATION.md)
+3. **Configure App**: Copy `local.properties.example` to `local.properties` and add your credentials
 
 ### Build Steps
 1. Clone the repository
-2. Open the project in Android Studio
-3. Sync Gradle files
-4. Run the app on an emulator or physical device
+2. Set up Supabase backend (see above)
+3. Start the MCP server
+4. Open the project in Android Studio
+5. Sync Gradle files
+6. Run the app on an emulator or physical device
 
 ```bash
 ./gradlew assembleDebug
@@ -94,12 +114,14 @@ APK artifacts are available in the Actions tab after each successful build.
 
 ## 📚 Documentation
 
+- **[MCP_INTEGRATION.md](MCP_INTEGRATION.md)**: **NEW!** MCP server setup and realtime backend
+- **[supabase/SETUP.md](supabase/SETUP.md)**: **NEW!** Supabase database configuration
 - **[ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md)**: Comprehensive guide for administrators
   - How to use admin mode
   - Security best practices
   - Preventing user cheating
   - Changing admin token
-  
+  - **NEW**: Viewing realtime user stamp statistics
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical architecture details
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)**: Implementation notes
 

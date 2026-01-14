@@ -33,4 +33,6 @@
     <string name="celebration_message">Du hast erfolgreich einen neuen Stempel gesammelt!</string>
     <string name="celebration_button">Großartig! 🎊</string>
     <string name="qr_code_instruction">Zeige diesen QR-Code den Teilnehmern</string>
+    <string name="user_statistics">Benutzer Statistiken</string>
+    <string name="no_users_yet">Noch keine Benutzer haben Stempel gesammelt</string>
 </resources>

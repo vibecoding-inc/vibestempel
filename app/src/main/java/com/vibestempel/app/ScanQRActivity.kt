@@ -11,16 +11,18 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
+import kotlinx.coroutines.launch
 
 class ScanQRActivity : AppCompatActivity() {
     
     private lateinit var barcodeView: DecoratedBarcodeView
-    private lateinit var storage: StempelStorage
+    private lateinit var storage: MCPStorage
     
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
@@ -37,7 +39,7 @@ class ScanQRActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        storage = StempelStorage(this)
+        storage = MCPStorage(this)
         
         barcodeView = DecoratedBarcodeView(this)
         barcodeView.decodeContinuous(callback)
@@ -65,17 +67,22 @@ class ScanQRActivity : AppCompatActivity() {
             return
         }
         
-        val stamp = Stamp(
-            eventId = event.id,
-            eventName = event.name
-        )
-        
-        val success = storage.addStamp(stamp)
-        if (success) {
-            showCelebrationDialog(event.name)
-        } else {
-            Toast.makeText(this, R.string.stamp_already_exists, Toast.LENGTH_SHORT).show()
-            finish()
+        // Add stamp via MCP server
+        lifecycleScope.launch {
+            val result = storage.addStamp(event.id, event.name)
+            if (result.isSuccess && result.getOrDefault(false)) {
+                showCelebrationDialog(event.name)
+            } else if (result.isSuccess && !result.getOrDefault(false)) {
+                Toast.makeText(this@ScanQRActivity, R.string.stamp_already_exists, Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(
+                    this@ScanQRActivity,
+                    "Failed to collect stamp: ${result.exceptionOrNull()?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+                finish()
+            }
         }
     }
     
