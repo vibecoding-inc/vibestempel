@@ -4,137 +4,398 @@ This directory contains the Model Context Protocol (MCP) server configuration fo
 
 ## What is MCP?
 
-Model Context Protocol (MCP) is a standardized way for applications to communicate with backend services. For Vibestempel, we use the Supabase MCP server to handle all database operations.
+Model Context Protocol (MCP) is a standardized way for applications to communicate with backend services. For Vibestempel, we use a custom MCP server that acts as a secure bridge between the Android app and Supabase.
 
-## Configuration Files
+## Files in This Directory
 
-- `supabase.json` - MCP server configuration for Supabase
-- `server-config.json` - Main MCP server configuration
+- **server.js** - Express.js server implementing MCP protocol
+- **package.json** - Node.js dependencies
+- **Dockerfile** - Container configuration for deployment
+- **supabase.json** - MCP server configuration
+- **README.md** - This file
 
-## Setup
+## Quick Start
 
-### 1. Install MCP Server
+### Prerequisites
 
-The Supabase MCP server is automatically installed via npx. No manual installation required.
+- Node.js 18+ installed
+- Supabase project created and configured
+- Environment variables set
 
-### 2. Set Environment Variables
+### Installation
 
-Create a `.env` file in the project root or set environment variables:
+```bash
+npm install
+```
+
+### Configuration
+
+Set environment variables:
 
 ```bash
 export SUPABASE_URL="https://your-project.supabase.co"
 export SUPABASE_KEY="your-anon-key-here"
+export PORT=3000  # Optional, defaults to 3000
 ```
 
-### 3. Running the MCP Server
-
-For development and testing:
+### Running Locally
 
 ```bash
-# From the project root
-npx @modelcontextprotocol/server-supabase
+npm start
 ```
 
-The server will:
-- Connect to your Supabase instance
-- Expose database operations via MCP protocol
-- Handle realtime subscriptions
-- Manage authentication and security
+The server will start on `http://localhost:3000`.
 
-### 4. MCP Server Endpoints
+Test it:
+```bash
+curl http://localhost:3000/health
+```
 
-The MCP server provides these capabilities:
+Expected response:
+```json
+{
+  "status": "ok",
+  "timestamp": "2026-01-14T12:00:00.000Z"
+}
+```
 
-- **Query Database**: Execute SQL queries
-- **Insert Data**: Add records to tables
-- **Update Data**: Modify existing records
-- **Delete Data**: Remove records
-- **Subscribe to Changes**: Realtime updates via WebSocket
-- **Call Functions**: Execute Supabase database functions
-
-## Integration with Android App
-
-The Android app communicates with the MCP server via HTTP/WebSocket. The MCP server acts as a secure intermediary between the app and Supabase.
-
-### Benefits of Using MCP Server
-
-1. **Security**: Credentials stay on the server, not in the app
-2. **Validation**: Server-side validation before database operations
-3. **Abstraction**: App doesn't need direct Supabase SDK
-4. **Flexibility**: Easy to switch backends without app changes
-5. **Monitoring**: Centralized logging and monitoring
-
-## Production Deployment
-
-For production, deploy the MCP server as a standalone service:
+## Deployment
 
 ### Option 1: Docker
 
+Build the image:
 ```bash
 docker build -t vibestempel-mcp .
-docker run -e SUPABASE_URL=$SUPABASE_URL -e SUPABASE_KEY=$SUPABASE_KEY vibestempel-mcp
 ```
 
-### Option 2: Cloud Service
+Run the container:
+```bash
+docker run -p 3000:3000 \
+  -e SUPABASE_URL="https://your-project.supabase.co" \
+  -e SUPABASE_KEY="your-anon-key" \
+  vibestempel-mcp
+```
 
-Deploy to:
-- Google Cloud Run
-- AWS Lambda
-- Heroku
-- Vercel
+### Option 2: Google Cloud Run
 
-### Option 3: Self-Hosted
+```bash
+gcloud run deploy vibestempel-mcp \
+  --source . \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars SUPABASE_URL=<url>,SUPABASE_KEY=<key>
+```
 
-Run on your own server with PM2:
+### Option 3: Heroku
+
+```bash
+heroku create vibestempel-mcp
+heroku config:set SUPABASE_URL=<url>
+heroku config:set SUPABASE_KEY=<key>
+git push heroku main
+```
+
+### Option 4: PM2 (Self-Hosted)
 
 ```bash
 npm install -g pm2
-pm2 start "npx @modelcontextprotocol/server-supabase" --name vibestempel-mcp
+pm2 start npm --name "vibestempel-mcp" -- start
+pm2 save
+pm2 startup
 ```
 
-## Security Considerations
+## API Documentation
 
-1. **Never expose SUPABASE_KEY in the Android app**
-2. **Use environment variables for all credentials**
-3. **Implement rate limiting on the MCP server**
-4. **Use HTTPS in production**
-5. **Validate all inputs server-side**
+### Health Check
+
+**GET /health**
+
+Returns server status.
+
+Response:
+```json
+{
+  "status": "ok",
+  "timestamp": "2026-01-14T12:00:00.000Z"
+}
+```
+
+### MCP Endpoint
+
+**POST /mcp**
+
+Main endpoint for all database operations.
+
+Request format:
+```json
+{
+  "method": "query|insert|update|rpc|subscribe",
+  "params": { ... }
+}
+```
+
+#### Query Operation
+
+Get data from a table.
+
+```json
+{
+  "method": "query",
+  "params": {
+    "table": "events",
+    "select": "*",
+    "filters": { "is_active": true },
+    "orderBy": "created_at.desc"
+  }
+}
+```
+
+Response:
+```json
+{
+  "data": [...]
+}
+```
+
+#### Insert Operation
+
+Add a new record.
+
+```json
+{
+  "method": "insert",
+  "params": {
+    "table": "events",
+    "data": {
+      "id": "uuid",
+      "name": "Welcome Event",
+      "description": "First event",
+      "is_active": true
+    }
+  }
+}
+```
+
+Response:
+```json
+{
+  "data": { ... }
+}
+```
+
+#### Update Operation
+
+Modify existing records.
+
+```json
+{
+  "method": "update",
+  "params": {
+    "table": "events",
+    "data": { "is_active": false },
+    "filters": { "id": "event-uuid" }
+  }
+}
+```
+
+Response:
+```json
+{
+  "data": { ... }
+}
+```
+
+#### RPC Operation
+
+Call a Supabase function.
+
+```json
+{
+  "method": "rpc",
+  "params": {
+    "function": "add_stamp",
+    "args": {
+      "p_device_id": "device-id",
+      "p_event_id": "event-uuid",
+      "p_event_name": "Event Name"
+    }
+  }
+}
+```
+
+Response:
+```json
+{
+  "data": {
+    "success": true,
+    "message": "Stamp collected successfully"
+  }
+}
+```
+
+#### Subscribe Operation
+
+Subscribe to realtime updates (via WebSocket).
+
+```json
+{
+  "method": "subscribe",
+  "params": {
+    "table": "stamps",
+    "event": "*"
+  }
+}
+```
+
+Response:
+```json
+{
+  "subscriptionId": "sub_123...",
+  "message": "Use WebSocket for realtime updates"
+}
+```
+
+### WebSocket API
+
+Connect to `ws://your-server:3000` for realtime updates.
+
+Send subscription request:
+```json
+{
+  "action": "subscribe",
+  "table": "stamps",
+  "event": "*"
+}
+```
+
+Receive updates:
+```json
+{
+  "type": "update",
+  "table": "stamps",
+  "event": "INSERT",
+  "data": { ... }
+}
+```
+
+Unsubscribe:
+```json
+{
+  "action": "unsubscribe",
+  "table": "stamps"
+}
+```
+
+## Security
+
+### Environment Variables
+
+**Never commit these to git!**
+
+- `SUPABASE_URL` - Your Supabase project URL
+- `SUPABASE_KEY` - Your Supabase anon/public key (NOT service_role!)
+- `PORT` - Server port (optional)
+
+### Best Practices
+
+1. **Use HTTPS in production**
+2. **Implement rate limiting** (add middleware)
+3. **Monitor logs** for suspicious activity
+4. **Use anon key**, not service_role key
+5. **Enable CORS** only for trusted origins
+6. **Validate all inputs** server-side
+7. **Keep dependencies updated**
 
 ## Monitoring
 
-Monitor the MCP server:
+### Logs
 
+**Docker:**
 ```bash
-# Check server logs
-pm2 logs vibestempel-mcp
-
-# Monitor performance
-pm2 monit
+docker logs <container-id>
 ```
+
+**PM2:**
+```bash
+pm2 logs vibestempel-mcp
+```
+
+**Cloud Run:**
+```bash
+gcloud logging read "resource.type=cloud_run_revision"
+```
+
+### Metrics
+
+Monitor:
+- Request count
+- Error rate
+- Response time
+- WebSocket connections
+- Database query performance
 
 ## Troubleshooting
 
 ### Server won't start
-- Check environment variables are set
-- Verify Supabase credentials
-- Ensure network connectivity
+
+**Check:**
+- Node.js version (18+)
+- Environment variables set
+- Port not already in use
+- Supabase credentials correct
 
 ### Connection errors
-- Verify MCP server URL in app configuration
-- Check firewall settings
-- Ensure server is running
+
+**Check:**
+- Server is running
+- Firewall allows connections
+- Correct URL in Android app
+- CORS configured correctly
 
 ### Realtime not working
-- Verify Realtime is enabled in Supabase
-- Check WebSocket connection
-- Review server logs for errors
+
+**Check:**
+- Realtime enabled in Supabase
+- Tables added to replication
+- WebSocket connection established
+- Event subscriptions active
+
+## Development
+
+### Adding New Endpoints
+
+1. Add handler function in `server.js`
+2. Update method switch case
+3. Test with curl or Postman
+4. Update Android `MCPClient.kt`
+5. Document in this README
+
+### Testing
+
+```bash
+# Health check
+curl http://localhost:3000/health
+
+# Query test
+curl -X POST http://localhost:3000/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"method":"query","params":{"table":"events"}}'
+```
 
 ## Support
 
-For MCP-specific issues:
-- MCP Documentation: https://modelcontextprotocol.io
-- Supabase MCP Server: https://github.com/modelcontextprotocol/servers
+For issues:
+- Supabase: https://supabase.com/docs
+- MCP Protocol: https://modelcontextprotocol.io
+- App Issues: See main README.md
 
-For app-specific issues:
-- See main README.md
-- Check supabase/SETUP.md
+## License
+
+Part of the Vibestempel project for educational purposes.
+
+---
+
+**Version:** 1.0
+**Last Updated:** January 2026
+
