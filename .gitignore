@@ -76,3 +76,13 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# MCP Server
+.github/mcp/node_modules/
+.github/mcp/.env
+.github/mcp/package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local

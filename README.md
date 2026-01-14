@@ -10,6 +10,8 @@ An Android application for managing stamp collection for first-semester informat
    - Create QR codes for events
    - Generate stamps for student check-ins
    - View current admin token
+   - **NEW**: View realtime user stamp statistics
+   - **NEW**: See live count of stamps per user
    - Beautiful material design interface
 
 2. **User Mode** - No authentication required
@@ -17,6 +19,7 @@ An Android application for managing stamp collection for first-semester informat
    - View collected stamps with stunning animations
    - Track event attendance
    - Celebration animations when collecting stamps
+   - **NEW**: All stamps synced to cloud via Supabase
 
 ### 🎨 Beautiful Design & Animations
 - **Celebration Dialog**: Animated popup when collecting a new stamp
@@ -30,10 +33,13 @@ An Android application for managing stamp collection for first-semester informat
 For detailed security information and admin mode usage, see [ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md).
 
 - Token-based admin authentication
+- **Serverside validation via Supabase**
+- **Supabase Row Level Security (RLS) policies**
 - Unique event IDs (UUID) prevent fake QR codes
-- Duplicate stamp prevention
+- Duplicate stamp prevention (serverside)
 - QR code validation
-- Private data storage
+- **Device-based user identification**
+- **Credentials stored in BuildConfig (not in code)**
 
 **⚠️ IMPORTANT**: Change the default admin token (`admin123`) before deploying!
 
@@ -64,11 +70,14 @@ git push origin v1.0.0
 
 - **Platform**: Android (minSdk 24, targetSdk 34)
 - **Language**: Kotlin
-- **Architecture**: Native Android with local storage (SharedPreferences)
+- **Architecture**: Native Android with **Supabase backend**
+- **Backend**: Supabase (PostgreSQL + Realtime)
 - **Key Libraries**:
   - ZXing for QR code generation and scanning
   - Material Design Components
   - AndroidX libraries
+  - Kotlin Coroutines for async operations
+  - Supabase Kotlin SDK for database and realtime
 
 ## Building the App
 
@@ -76,12 +85,19 @@ git push origin v1.0.0
 - Android Studio Arctic Fox or later
 - JDK 17 or later
 - Android SDK with API 34
+- **Supabase project** (see setup below)
+
+### Supabase Backend Setup
+
+1. **Create Supabase Project**: Follow [`supabase/SETUP.md`](supabase/SETUP.md)
+2. **Configure App**: Copy `local.properties.example` to `local.properties` and add your Supabase credentials
 
 ### Build Steps
 1. Clone the repository
-2. Open the project in Android Studio
-3. Sync Gradle files
-4. Run the app on an emulator or physical device
+2. Set up Supabase backend (see above)
+3. Open the project in Android Studio
+4. Sync Gradle files
+5. Run the app on an emulator or physical device
 
 ```bash
 ./gradlew assembleDebug
@@ -109,12 +125,19 @@ APK artifacts are available in the Actions tab after each successful build.
 
 ## 📚 Documentation
 
+- **[DEPLOYMENT.md](DEPLOYMENT.md)**: **NEW!** Complete deployment guide
+  - Supabase setup and configuration
+  - Building and signing the app
+  - Deployment options (Play Store, APK, Firebase)
+  - Production considerations
+  - Monitoring and maintenance
+- **[supabase/SETUP.md](supabase/SETUP.md)**: Detailed Supabase database configuration
 - **[ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md)**: Comprehensive guide for administrators
   - How to use admin mode
   - Security best practices
   - Preventing user cheating
   - Changing admin token
-  
+  - Viewing realtime user stamp statistics
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical architecture details
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)**: Implementation notes
 
