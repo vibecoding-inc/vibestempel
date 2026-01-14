@@ -1,0 +1,63 @@
+name: Create Release with APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build Release APK
+      run: ./gradlew assembleRelease --stacktrace
+      
+    - name: Get tag name
+      id: tag_name
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+    - name: Rename APK
+      run: |
+        mkdir -p release-artifacts
+        cp app/build/outputs/apk/release/app-release-unsigned.apk release-artifacts/vibestempel-${{ steps.tag_name.outputs.TAG_NAME }}.apk
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release-artifacts/vibestempel-${{ steps.tag_name.outputs.TAG_NAME }}.apk
+        body: |
+          ## Vibestempel Release ${{ steps.tag_name.outputs.TAG_NAME }}
+          
+          ### Download
+          Download the APK file below to install the app on your Android device.
+          
+          ### Installation
+          1. Download the APK file
+          2. Enable "Install from Unknown Sources" in your Android settings
+          3. Open the APK file to install
+          
+          ### ⚠️ Security Reminder
+          Remember to change the default admin token (`admin123`) before using in production!
+          
+          See [ADMIN_DOCUMENTATION.md](https://github.com/vibecoding-inc/vibestempel/blob/main/ADMIN_DOCUMENTATION.md) for more details.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
