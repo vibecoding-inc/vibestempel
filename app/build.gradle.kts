@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -16,6 +19,26 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            // Check if custom keystore configuration exists
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            if (keystorePropertiesFile.exists()) {
+                val keystoreProperties = Properties()
+                FileInputStream(keystorePropertiesFile).use {
+                    keystoreProperties.load(it)
+                }
+                
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+            }
+            // If no custom keystore, signing will fall back to debug signing
+            // This allows CI/CD builds to produce signed (but not production-ready) APKs
+        }
+    }
+
     buildTypes {
         debug {
             // Load Supabase credentials from local.properties for debug builds
@@ -29,6 +52,14 @@ android {
             buildConfigField("String", "SUPABASE_KEY", "\"${properties.getProperty("supabase.key", "")}\"")
         }
         release {
+            // Use release signing config if available, otherwise fall back to debug
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+            
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

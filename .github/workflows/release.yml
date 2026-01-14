@@ -41,7 +41,7 @@ jobs:
     - name: Rename APK
       run: |
         mkdir -p release-artifacts
-        cp app/build/outputs/apk/release/app-release-unsigned.apk release-artifacts/vibestempel-${{ steps.tag_name.outputs.TAG_NAME }}.apk
+        cp app/build/outputs/apk/release/app-release.apk release-artifacts/vibestempel-${{ steps.tag_name.outputs.TAG_NAME }}.apk
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
@@ -54,9 +54,10 @@ jobs:
           Download the APK file below to install the app on your Android device.
           
           ### ⚠️ Important Notes
-          - **This is an unsigned APK** intended for development and testing purposes
+          - **This APK is signed with debug keys** for easy installation and testing
           - You may need to enable "Install from Unknown Sources" in your Android settings
-          - For production use, the APK should be signed with a proper keystore
+          - For production Play Store deployment, build with a proper release keystore
+          - See [DEPLOYMENT.md](https://github.com/vibecoding-inc/vibestempel/blob/main/DEPLOYMENT.md) for production signing instructions
           
           ### Installation
           1. Download the APK file
