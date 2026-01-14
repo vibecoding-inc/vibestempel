@@ -2,12 +2,14 @@ package com.vibestempel.app
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import java.util.UUID
 
 class AdminDashboardActivity : AppCompatActivity() {
@@ -20,12 +22,13 @@ class AdminDashboardActivity : AppCompatActivity() {
         
         storage = StempelStorage(this)
         
-        val eventNameInput = findViewById<EditText>(R.id.eventNameInput)
-        val eventDescInput = findViewById<EditText>(R.id.eventDescInput)
-        val generateButton = findViewById<Button>(R.id.generateButton)
+        val eventNameInput = findViewById<TextInputEditText>(R.id.eventNameInput)
+        val eventDescInput = findViewById<TextInputEditText>(R.id.eventDescInput)
+        val generateButton = findViewById<MaterialButton>(R.id.generateButton)
+        val qrCodeCard = findViewById<CardView>(R.id.qrCodeCard)
         val qrCodeImage = findViewById<ImageView>(R.id.qrCodeImage)
         val currentTokenValue = findViewById<TextView>(R.id.currentTokenValue)
-        val logoutButton = findViewById<Button>(R.id.logoutButton)
+        val logoutButton = findViewById<MaterialButton>(R.id.logoutButton)
         
         // Display current admin token
         currentTokenValue.text = storage.getAdminToken()
@@ -47,7 +50,11 @@ class AdminDashboardActivity : AppCompatActivity() {
             
             val qrBitmap = QRCodeGenerator.generateQRCode(event)
             qrCodeImage.setImageBitmap(qrBitmap)
-            qrCodeImage.visibility = View.VISIBLE
+            qrCodeCard.visibility = View.VISIBLE
+            
+            // Animate the QR code card appearance
+            val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp_collect_scale)
+            qrCodeCard.startAnimation(scaleAnimation)
             
             Toast.makeText(this, R.string.qr_generated, Toast.LENGTH_SHORT).show()
         }

@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="purple_500">#667eea</color>
+    <color name="purple_700">#764ba2</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Beautiful gradient colors -->
+    <color name="gradient_start">#667eea</color>
+    <color name="gradient_mid">#764ba2</color>
+    <color name="gradient_end">#f093fb</color>
+    
+    <!-- Accent colors -->
+    <color name="stamp_green">#4CAF50</color>
+    <color name="stamp_gold">#FFD700</color>
+    <color name="celebration_yellow">#FFC107</color>
+    <color name="celebration_orange">#FF9800</color>
+    
+    <!-- Background colors -->
+    <color name="light_gray">#F5F5F5</color>
+    <color name="card_shadow">#30000000</color>
+    <color name="text_secondary">#757575</color>
 </resources>

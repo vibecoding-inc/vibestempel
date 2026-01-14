@@ -1,10 +1,17 @@
 package com.vibestempel.app
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Window
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import com.google.android.material.button.MaterialButton
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -65,12 +72,34 @@ class ScanQRActivity : AppCompatActivity() {
         
         val success = storage.addStamp(stamp)
         if (success) {
-            Toast.makeText(this, R.string.stamp_received, Toast.LENGTH_LONG).show()
-            setResult(Activity.RESULT_OK)
+            showCelebrationDialog(event.name)
         } else {
             Toast.makeText(this, R.string.stamp_already_exists, Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+    
+    private fun showCelebrationDialog(eventName: String) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_celebration)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+        
+        // Get the card view parent and animate it
+        val cardView = dialog.findViewById<CardView>(R.id.celebrationCard)
+        cardView?.let {
+            val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp_collect_scale)
+            it.startAnimation(scaleAnimation)
         }
         
-        finish()
+        val okButton = dialog.findViewById<MaterialButton>(R.id.celebrationOkButton)
+        okButton.setOnClickListener {
+            dialog.dismiss()
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+        
+        dialog.show()
     }
 }
