@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class ScanQRActivity : AppCompatActivity() {
     
     private lateinit var barcodeView: DecoratedBarcodeView
-    private lateinit var storage: MCPStorage
+    private lateinit var storage: SupabaseStorage
     
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
@@ -39,7 +39,7 @@ class ScanQRActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        storage = MCPStorage(this)
+        storage = SupabaseStorage(this)
         
         barcodeView = DecoratedBarcodeView(this)
         barcodeView.decodeContinuous(callback)

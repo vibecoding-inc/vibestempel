@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class UserDashboardActivity : AppCompatActivity() {
     
-    private lateinit var storage: MCPStorage
+    private lateinit var storage: SupabaseStorage
     private lateinit var stampsAdapter: StampsAdapter
     private lateinit var stampsRecyclerView: RecyclerView
     private lateinit var noStampsText: TextView
@@ -45,7 +45,7 @@ class UserDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_dashboard)
         
-        storage = MCPStorage(this)
+        storage = SupabaseStorage(this)
         
         stampsRecyclerView = findViewById(R.id.stampsRecyclerView)
         noStampsText = findViewById(R.id.noStampsText)

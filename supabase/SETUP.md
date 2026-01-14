@@ -93,20 +93,6 @@ The policies ensure:
 4. Check Supabase dashboard > **Table Editor** > `stamps` to see the new entry
 5. Verify realtime updates work in Admin dashboard
 
-## Step 8: MCP Server Configuration (Optional)
-
-The MCP server configuration is located at `.github/mcp/supabase.json`.
-
-To use it:
-
-1. Set environment variables:
-   ```bash
-   export SUPABASE_URL="your_url_here"
-   export SUPABASE_KEY="your_key_here"
-   ```
-
-2. The MCP server allows external tools to interact with your Supabase database
-
 ## Database Schema Overview
 
 ### Tables

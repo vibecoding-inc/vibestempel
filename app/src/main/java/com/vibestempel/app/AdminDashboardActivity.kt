@@ -18,14 +18,14 @@ import java.util.UUID
 
 class AdminDashboardActivity : AppCompatActivity() {
     
-    private lateinit var storage: MCPStorage
+    private lateinit var storage: SupabaseStorage
     private lateinit var userStampCountAdapter: UserStampCountAdapter
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_dashboard)
         
-        storage = MCPStorage(this)
+        storage = SupabaseStorage(this)
         
         val eventNameInput = findViewById<TextInputEditText>(R.id.eventNameInput)
         val eventDescInput = findViewById<TextInputEditText>(R.id.eventDescInput)

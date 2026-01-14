@@ -33,13 +33,13 @@ An Android application for managing stamp collection for first-semester informat
 For detailed security information and admin mode usage, see [ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md).
 
 - Token-based admin authentication
-- **NEW**: Serverside validation via MCP server
-- **NEW**: Supabase Row Level Security (RLS) policies
+- **Serverside validation via Supabase**
+- **Supabase Row Level Security (RLS) policies**
 - Unique event IDs (UUID) prevent fake QR codes
 - Duplicate stamp prevention (serverside)
 - QR code validation
-- **NEW**: Device-based user identification
-- **NEW**: Credentials never stored in app
+- **Device-based user identification**
+- **Credentials stored in BuildConfig (not in code)**
 
 **⚠️ IMPORTANT**: Change the default admin token (`admin123`) before deploying!
 
@@ -55,15 +55,14 @@ The repository includes GitHub Actions workflow that automatically:
 
 - **Platform**: Android (minSdk 24, targetSdk 34)
 - **Language**: Kotlin
-- **Architecture**: Native Android with **Supabase backend via MCP server**
+- **Architecture**: Native Android with **Supabase backend**
 - **Backend**: Supabase (PostgreSQL + Realtime)
-- **API**: Model Context Protocol (MCP) server
 - **Key Libraries**:
   - ZXing for QR code generation and scanning
   - Material Design Components
   - AndroidX libraries
   - Kotlin Coroutines for async operations
-  - Supabase Realtime for live updates
+  - Supabase Kotlin SDK for database and realtime
 
 ## Building the App
 
@@ -72,21 +71,18 @@ The repository includes GitHub Actions workflow that automatically:
 - JDK 17 or later
 - Android SDK with API 34
 - **Supabase project** (see setup below)
-- **MCP server running** (see setup below)
 
 ### Supabase Backend Setup
 
 1. **Create Supabase Project**: Follow [`supabase/SETUP.md`](supabase/SETUP.md)
-2. **Deploy MCP Server**: Follow [`MCP_INTEGRATION.md`](MCP_INTEGRATION.md)
-3. **Configure App**: Copy `local.properties.example` to `local.properties` and add your credentials
+2. **Configure App**: Copy `local.properties.example` to `local.properties` and add your Supabase credentials
 
 ### Build Steps
 1. Clone the repository
 2. Set up Supabase backend (see above)
-3. Start the MCP server
-4. Open the project in Android Studio
-5. Sync Gradle files
-6. Run the app on an emulator or physical device
+3. Open the project in Android Studio
+4. Sync Gradle files
+5. Run the app on an emulator or physical device
 
 ```bash
 ./gradlew assembleDebug
@@ -114,14 +110,13 @@ APK artifacts are available in the Actions tab after each successful build.
 
 ## 📚 Documentation
 
-- **[MCP_INTEGRATION.md](MCP_INTEGRATION.md)**: **NEW!** MCP server setup and realtime backend
-- **[supabase/SETUP.md](supabase/SETUP.md)**: **NEW!** Supabase database configuration
+- **[supabase/SETUP.md](supabase/SETUP.md)**: Supabase database configuration
 - **[ADMIN_DOCUMENTATION.md](ADMIN_DOCUMENTATION.md)**: Comprehensive guide for administrators
   - How to use admin mode
   - Security best practices
   - Preventing user cheating
   - Changing admin token
-  - **NEW**: Viewing realtime user stamp statistics
+  - Viewing realtime user stamp statistics
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical architecture details
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)**: Implementation notes
 
