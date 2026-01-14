@@ -56,7 +56,7 @@ The repository includes GitHub Actions workflows that automatically:
 ### Release Workflow
 - Triggers when a tag is created (e.g., `v1.0.0`)
 - Builds release APK with production Supabase credentials
-- Creates a GitHub release with the tag name
+- Creates a GitHub **draft** release with the tag name
 - Uploads APK as a downloadable release asset
 - Includes installation instructions in the release notes
 
@@ -64,11 +64,16 @@ The repository includes GitHub Actions workflows that automatically:
 - `SUPABASE_URL`: Your Supabase project URL
 - `SUPABASE_KEY`: Your Supabase anon key
 
-To create a new release, simply push a tag:
+To create a new release:
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
 ```
+
+After the CI workflow completes, the release will be created as a **draft**. You can then:
+1. Review the release notes and APK
+2. Edit the release description if needed
+3. Publish the release when ready
 
 ## Technical Details
 
