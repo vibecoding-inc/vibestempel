@@ -67,7 +67,7 @@ jobs:
           Remember to change the default admin token (`admin123`) before using in production!
           
           See [ADMIN_DOCUMENTATION.md](https://github.com/vibecoding-inc/vibestempel/blob/main/ADMIN_DOCUMENTATION.md) for more details.
-        draft: false
+        draft: true
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
