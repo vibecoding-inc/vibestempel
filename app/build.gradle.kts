@@ -22,7 +22,7 @@ android {
             val localPropertiesFile = rootProject.file("local.properties")
             val properties = org.jetbrains.kotlin.konan.properties.Properties()
             if (localPropertiesFile.exists()) {
-                properties.load(localPropertiesFile.inputStream())
+                localPropertiesFile.inputStream().use { properties.load(it) }
             }
             
             buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supabase.url", "")}\"")
@@ -39,7 +39,7 @@ android {
             val localPropertiesFile = rootProject.file("local.properties")
             val properties = org.jetbrains.kotlin.konan.properties.Properties()
             if (localPropertiesFile.exists()) {
-                properties.load(localPropertiesFile.inputStream())
+                localPropertiesFile.inputStream().use { properties.load(it) }
             }
             
             buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supabase.url", "")}\"")
