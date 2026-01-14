@@ -22,7 +22,7 @@ android {
             val localPropertiesFile = rootProject.file("local.properties")
             val properties = org.jetbrains.kotlin.konan.properties.Properties()
             if (localPropertiesFile.exists()) {
-                properties.load(localPropertiesFile.inputStream())
+                localPropertiesFile.inputStream().use { properties.load(it) }
             }
             
             buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supabase.url", "")}\"")
@@ -35,9 +35,15 @@ android {
                 "proguard-rules.pro"
             )
             
-            // For release builds, use environment variables or build parameters
-            buildConfigField("String", "SUPABASE_URL", "\"${System.getenv("SUPABASE_URL") ?: ""}\"")
-            buildConfigField("String", "SUPABASE_KEY", "\"${System.getenv("SUPABASE_KEY") ?: ""}\"")
+            // Load Supabase credentials from local.properties for release builds
+            val localPropertiesFile = rootProject.file("local.properties")
+            val properties = org.jetbrains.kotlin.konan.properties.Properties()
+            if (localPropertiesFile.exists()) {
+                localPropertiesFile.inputStream().use { properties.load(it) }
+            }
+            
+            buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supabase.url", "")}\"")
+            buildConfigField("String", "SUPABASE_KEY", "\"${properties.getProperty("supabase.key", "")}\"")
         }
     }
     compileOptions {

@@ -26,6 +26,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: Create local.properties
+      run: |
+        echo "supabase.url=${{ secrets.SUPABASE_URL }}" > local.properties
+        echo "supabase.key=${{ secrets.SUPABASE_KEY }}" >> local.properties
+      
     - name: Build Release APK
       run: ./gradlew assembleRelease --stacktrace
       
