@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vibestempel</string>
+    <string name="welcome_message">Willkommen beim Informatik Stempelpass</string>
+    <string name="select_mode">Bitte wählen Sie Ihren Modus:</string>
+    <string name="admin_mode">Admin Modus</string>
+    <string name="user_mode">Benutzer Modus</string>
+    <string name="admin_login_title">Admin Login</string>
+    <string name="enter_token">Admin Token eingeben:</string>
+    <string name="login">Login</string>
+    <string name="invalid_token">Ungültiger Token!</string>
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="create_qr_code">QR-Code erstellen</string>
+    <string name="event_name">Event Name:</string>
+    <string name="event_description">Event Beschreibung:</string>
+    <string name="generate_qr">QR-Code generieren</string>
+    <string name="fill_all_fields">Bitte alle Felder ausfüllen!</string>
+    <string name="user_dashboard">Meine Stempel</string>
+    <string name="scan_qr_code">QR-Code scannen</string>
+    <string name="no_stamps_yet">Noch keine Stempel vorhanden.\nScanne QR-Codes bei Events!</string>
+    <string name="stamp_received">Stempel erhalten!</string>
+    <string name="stamp_already_exists">Du hast bereits einen Stempel für dieses Event!</string>
+    <string name="invalid_qr_code">Ungültiger QR-Code!</string>
+    <string name="qr_generated">QR-Code wurde generiert</string>
+    <string name="back">Zurück</string>
+    <string name="current_token">Aktueller Admin Token:</string>
+    <string name="change_token">Token ändern</string>
+    <string name="logout">Abmelden</string>
+    <string name="stamps_count">Stempel: %d</string>
+    <string name="scan_prompt">Scanne einen Event QR-Code</string>
+    <string name="camera_permission_required">Kamera-Berechtigung erforderlich</string>
+</resources>
