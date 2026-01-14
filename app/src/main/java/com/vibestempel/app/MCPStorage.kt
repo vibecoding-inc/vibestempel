@@ -3,9 +3,12 @@ package com.vibestempel.app
 import android.content.Context
 import android.provider.Settings
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -21,18 +24,13 @@ class MCPStorage(private val context: Context) {
     
     private val mcpClient = MCPClient(context)
     
-    private val deviceId: String by lazy {
-        Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    private fun getDeviceId(): String {
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
     
     // Realtime flows for admin dashboard
     private val _userStampCounts = MutableStateFlow<List<UserStampCount>>(emptyList())
     val userStampCounts: Flow<List<UserStampCount>> = _userStampCounts.asStateFlow()
-    
-    /**
-     * Get the device ID used to identify this user
-     */
-    fun getDeviceId(): String = deviceId
     
     /**
      * Create an event via MCP server
@@ -98,6 +96,7 @@ class MCPStorage(private val context: Context) {
      */
     suspend fun addStamp(eventId: String, eventName: String): Result<Boolean> {
         return try {
+            val deviceId = getDeviceId()
             val params = mapOf(
                 "p_device_id" to deviceId,
                 "p_event_id" to eventId,
@@ -227,7 +226,7 @@ class MCPStorage(private val context: Context) {
         try {
             val result = mcpClient.subscribe("stamps", "*") { update ->
                 // When stamps change, refresh the counts
-                kotlinx.coroutines.MainScope().launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     refreshUserStampCounts()
                 }
             }
@@ -258,6 +257,7 @@ class MCPStorage(private val context: Context) {
      */
     private suspend fun getOrCreateUserId(): String? {
         return try {
+            val deviceId = getDeviceId()
             // Try to find existing user
             val filters = mapOf("device_id" to deviceId)
             val result = mcpClient.query("users", "*", filters)
@@ -270,9 +270,10 @@ class MCPStorage(private val context: Context) {
                     jsonArray.getJSONObject(0).getString("id")
                 } else {
                     // Create new user
+                    val newDeviceId = getDeviceId()
                     val userData = JSONObject().apply {
-                        put("device_id", deviceId)
-                        put("username", "User-${deviceId.take(8)}")
+                        put("device_id", newDeviceId)
+                        put("username", "User-${newDeviceId.take(8)}")
                     }
                     
                     val insertResult = mcpClient.insert("users", userData)
