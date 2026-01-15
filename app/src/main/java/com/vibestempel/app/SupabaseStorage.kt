@@ -284,12 +284,12 @@ class SupabaseStorage(private val context: Context) {
      */
     suspend fun getUsername(): Result<String?> {
         return try {
-            val userId = getOrCreateUserId()
+            val deviceId = getDeviceId()
             
             val users = client.from("users")
                 .select {
                     filter {
-                        eq("id", userId)
+                        eq("device_id", deviceId)
                     }
                 }
                 .decodeList<SupabaseUser>()

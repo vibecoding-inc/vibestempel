@@ -144,25 +144,31 @@ class UserDashboardActivity : AppCompatActivity() {
             }
         }
         
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle(R.string.set_username)
             .setView(dialogView)
-            .setPositiveButton(R.string.save) { dialog, _ ->
-                val newUsername = usernameInput.text.toString().trim()
-                if (newUsername.isEmpty()) {
-                    Toast.makeText(this, R.string.username_empty, Toast.LENGTH_SHORT).show()
-                } else {
-                    saveUsername(newUsername)
-                }
-                dialog.dismiss()
+            .setPositiveButton(R.string.save) { _, _ ->
+                // Will be overridden below
             }
             .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
-            .show()
+            .create()
+        
+        dialog.show()
+        
+        // Override the positive button to prevent auto-dismiss
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val newUsername = usernameInput.text.toString().trim()
+            if (newUsername.isEmpty()) {
+                Toast.makeText(this, R.string.username_empty, Toast.LENGTH_SHORT).show()
+            } else {
+                saveUsername(newUsername, dialog)
+            }
+        }
     }
     
-    private fun saveUsername(username: String) {
+    private fun saveUsername(username: String, dialog: AlertDialog) {
         lifecycleScope.launch {
             val result = storage.updateUsername(username)
             if (result.isSuccess) {
@@ -171,6 +177,7 @@ class UserDashboardActivity : AppCompatActivity() {
                     R.string.username_updated,
                     Toast.LENGTH_SHORT
                 ).show()
+                dialog.dismiss()
             } else {
                 Toast.makeText(
                     this@UserDashboardActivity,
