@@ -5,14 +5,17 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
 class UserDashboardActivity : AppCompatActivity() {
@@ -52,6 +55,7 @@ class UserDashboardActivity : AppCompatActivity() {
         stampsCountText = findViewById(R.id.stampsCountText)
         val scanButton = findViewById<Button>(R.id.scanButton)
         val backButton = findViewById<Button>(R.id.backButton)
+        val settingsButton = findViewById<MaterialButton>(R.id.settingsButton)
         
         setupRecyclerView()
         updateStampsList()
@@ -62,6 +66,10 @@ class UserDashboardActivity : AppCompatActivity() {
             } else {
                 requestCameraPermission()
             }
+        }
+        
+        settingsButton.setOnClickListener {
+            showUsernameDialog()
         }
         
         backButton.setOnClickListener {
@@ -119,5 +127,64 @@ class UserDashboardActivity : AppCompatActivity() {
     private fun startQRScanner() {
         val intent = android.content.Intent(this, ScanQRActivity::class.java)
         scanQRLauncher.launch(intent)
+    }
+    
+    private fun showUsernameDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_set_username, null)
+        val usernameInput = dialogView.findViewById<EditText>(R.id.usernameInput)
+        
+        // Load current username
+        lifecycleScope.launch {
+            val result = storage.getUsername()
+            if (result.isSuccess) {
+                val currentUsername = result.getOrNull()
+                if (!currentUsername.isNullOrBlank()) {
+                    usernameInput.setText(currentUsername)
+                }
+            }
+        }
+        
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(R.string.set_username)
+            .setView(dialogView)
+            .setPositiveButton(R.string.save) { _, _ ->
+                // Will be overridden below
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        
+        dialog.show()
+        
+        // Override the positive button to prevent auto-dismiss
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val newUsername = usernameInput.text.toString().trim()
+            if (newUsername.isEmpty()) {
+                Toast.makeText(this, R.string.username_empty, Toast.LENGTH_SHORT).show()
+            } else {
+                saveUsername(newUsername, dialog)
+            }
+        }
+    }
+    
+    private fun saveUsername(username: String, dialog: AlertDialog) {
+        lifecycleScope.launch {
+            val result = storage.updateUsername(username)
+            if (result.isSuccess) {
+                Toast.makeText(
+                    this@UserDashboardActivity,
+                    R.string.username_updated,
+                    Toast.LENGTH_SHORT
+                ).show()
+                dialog.dismiss()
+            } else {
+                Toast.makeText(
+                    this@UserDashboardActivity,
+                    R.string.username_update_failed,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }

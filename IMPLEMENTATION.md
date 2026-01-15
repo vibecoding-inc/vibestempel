@@ -11,7 +11,7 @@ A complete Android application for managing a "Stempelpass" (stamp collection) s
 - **Min SDK**: 24 (Android 7.0)
 - **Target SDK**: 34 (Android 14)
 - **Build System**: Gradle with Kotlin DSL
-- **Storage**: Local storage using SharedPreferences (no backend required)
+- **Storage**: Supabase backend (PostgreSQL + Realtime)
 
 ### Key Features Implemented
 
@@ -31,6 +31,8 @@ A complete Android application for managing a "Stempelpass" (stamp collection) s
 - Generate QR codes for events
 - Display generated QR codes for users to scan
 - View current admin token
+- **View realtime user stamp statistics**
+- **See all users with their display names and stamp counts**
 - Logout functionality
 
 #### 3. User Mode
@@ -38,6 +40,7 @@ A complete Android application for managing a "Stempelpass" (stamp collection) s
 - View collected stamps in a list (RecyclerView)
 - See total stamp count
 - Button to scan new QR codes
+- **Settings button to configure display name**
 - Each stamp shows event name and timestamp
 - Empty state message when no stamps exist
 
@@ -46,6 +49,21 @@ A complete Android application for managing a "Stempelpass" (stamp collection) s
 - Real-time QR code detection
 - Automatic stamp collection upon successful scan
 - Duplicate prevention (one stamp per event)
+
+#### 4. User Management (NEW)
+**User Profile Configuration**
+- Users can set their display name via Settings button
+- Names are stored in Supabase database
+- Names persist across sessions and devices
+- Dialog-based UI for simple name entry
+- Validation to ensure names are not empty
+
+**Admin View of Users**
+- Admin dashboard displays all users with their configured names
+- If no name is set, shows "User-[DeviceID]" as default
+- Shows device ID as secondary information
+- Realtime updates when users change their names
+- Helps admins identify students by name instead of device ID
 
 ### Data Models
 
@@ -60,10 +78,28 @@ A complete Android application for managing a "Stempelpass" (stamp collection) s
 - eventName: Name of the event
 - timestamp: When stamp was collected
 
-**StempelStorage**
-- Manages all data persistence
-- Uses SharedPreferences for local storage
-- Methods for adding stamps, checking duplicates, and managing admin token
+**SupabaseUser** (NEW)
+- id: Unique user identifier (UUID)
+- deviceId: Android device ID for authentication
+- username: Optional display name configured by user
+- createdAt: When user was first created
+- updatedAt: When user profile was last updated
+
+**UserStampCount** (NEW)
+- userId: Reference to user
+- deviceId: Device identifier
+- username: User's configured display name
+- stampCount: Total number of stamps collected
+- lastStampCollected: Timestamp of most recent stamp
+
+**SupabaseStorage**
+- Manages all data persistence via Supabase
+- Methods for adding stamps, checking duplicates
+- **NEW: getUsername() - retrieves current user's display name**
+- **NEW: updateUsername() - updates user's display name**
+- getUserStampCounts() - gets all users with stamp statistics
+- Realtime subscription for admin dashboard updates
+- Admin token management (SharedPreferences)
 
 **QRCodeGenerator**
 - Generates QR codes from Event objects
@@ -189,12 +225,14 @@ The app can be tested with:
 - StempelStorage.kt
 - QRCodeGenerator.kt
 
-**Layout Files (5)**
+**Layout Files (7)**
 - activity_main.xml
 - activity_admin_login.xml
 - activity_admin_dashboard.xml
 - activity_user_dashboard.xml
 - item_stamp.xml
+- item_user_stamp_count.xml
+- dialog_set_username.xml (NEW)
 
 **Resource Files (4)**
 - strings.xml (German)
@@ -222,8 +260,10 @@ The Vibestempel app is now fully implemented with all requested features:
 - ✅ QR code generation (Admin)
 - ✅ QR code scanning (User)
 - ✅ Stamp collection and display
-- ✅ No backend required (local storage only)
-- ✅ Duplicate prevention
+- ✅ Supabase backend with realtime updates
+- ✅ Duplicate prevention (serverside)
 - ✅ German UI
+- ✅ **User profile management (display names)**
+- ✅ **Admin can view user names and statistics**
 
 The app is ready to build and deploy on Android devices running Android 7.0 or later.
