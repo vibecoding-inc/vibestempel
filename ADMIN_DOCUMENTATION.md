@@ -4,10 +4,11 @@
 1. [Admin Mode Overview](#admin-mode-overview)
 2. [How to Access Admin Mode](#how-to-access-admin-mode)
 3. [Creating Events and QR Codes](#creating-events-and-qr-codes)
-4. [Security Features](#security-features)
-5. [Preventing User Cheating](#preventing-user-cheating)
-6. [Changing the Admin Token](#changing-the-admin-token)
-7. [Best Practices](#best-practices)
+4. [Viewing User Statistics](#viewing-user-statistics)
+5. [Security Features](#security-features)
+6. [Preventing User Cheating](#preventing-user-cheating)
+7. [Changing the Admin Token](#changing-the-admin-token)
+8. [Best Practices](#best-practices)
 
 ---
 
@@ -18,6 +19,7 @@ The Admin Mode is a protected area of the Vibestempel app that allows authorized
 - Generate QR codes for events
 - Display QR codes for students to scan
 - View and change the admin authentication token
+- **View realtime user stamp statistics with display names**
 
 **Only users with the correct admin token can access this mode.**
 
@@ -72,6 +74,43 @@ Once logged into the Admin Dashboard, you can create events:
 - Create QR codes before the event starts
 - Display the QR code prominently so students can scan easily
 - You can create multiple QR codes for different events
+
+---
+
+## Viewing User Statistics
+
+The Admin Dashboard provides realtime statistics about users and their stamp collection:
+
+### User Statistics Display
+
+Below the QR code generation section, you'll see a **User Statistics** panel that shows:
+- **Total Users**: The number of users who have collected at least one stamp
+- **User List**: A scrollable list of all users with their information:
+  - **Display Name**: The name the user has configured (if set)
+  - **Device ID**: A truncated device identifier shown below the name
+  - **Stamp Count**: The total number of stamps collected by that user
+  - **Last Activity**: When the user last collected a stamp
+
+### User Display Names
+
+Users can now configure their display name via the Settings button in User Mode:
+- If a user sets their name, it will appear prominently in the admin dashboard
+- If no name is set, the system shows "User-[Device ID]" as before
+- This makes it easier to identify students and track participation
+
+### Realtime Updates
+
+The statistics update automatically in realtime:
+- When a user scans a QR code, their stamp count increments immediately
+- New users appear in the list automatically
+- Last activity times update live
+- No need to refresh or reload the dashboard
+
+### Privacy Considerations
+
+- User display names are voluntary and stored in the database
+- Device IDs are used for identification but are truncated in the display
+- Admin can see all user activity to monitor event participation
 
 ---
 

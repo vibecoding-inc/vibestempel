@@ -11,7 +11,7 @@ An Android application for managing stamp collection for first-semester informat
    - Generate stamps for student check-ins
    - View current admin token
    - **NEW**: View realtime user stamp statistics
-   - **NEW**: See live count of stamps per user
+   - **NEW**: See live count of stamps per user with display names
    - Beautiful material design interface
 
 2. **User Mode** - No authentication required
@@ -20,6 +20,7 @@ An Android application for managing stamp collection for first-semester informat
    - Track event attendance
    - Celebration animations when collecting stamps
    - **NEW**: All stamps synced to cloud via Supabase
+   - **NEW**: Configure your display name via Settings button
 
 ### 🎨 Beautiful Design & Animations
 - **Celebration Dialog**: Animated popup when collecting a new stamp
