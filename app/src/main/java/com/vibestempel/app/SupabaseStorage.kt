@@ -279,6 +279,55 @@ class SupabaseStorage(private val context: Context) {
         }
     }
     
+    /**
+     * Get the current user's username
+     */
+    suspend fun getUsername(): Result<String?> {
+        return try {
+            val userId = getOrCreateUserId()
+            
+            val users = client.from("users")
+                .select {
+                    filter {
+                        eq("id", userId)
+                    }
+                }
+                .decodeList<SupabaseUser>()
+            
+            if (users.isNotEmpty()) {
+                Result.success(users.first().username)
+            } else {
+                Result.success(null)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting username", e)
+            Result.failure(e)
+        }
+    }
+    
+    /**
+     * Update the current user's username
+     */
+    suspend fun updateUsername(newUsername: String): Result<Boolean> {
+        return try {
+            val deviceId = getDeviceId()
+            
+            client.from("users")
+                .update({
+                    set("username", newUsername)
+                }) {
+                    filter {
+                        eq("device_id", deviceId)
+                    }
+                }
+            
+            Result.success(true)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating username", e)
+            Result.failure(e)
+        }
+    }
+    
     // Admin token methods - kept for backward compatibility
     fun validateAdminToken(token: String): Boolean {
         val prefs = context.getSharedPreferences("vibestempel_prefs", Context.MODE_PRIVATE)

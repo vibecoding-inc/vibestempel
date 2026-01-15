@@ -35,4 +35,12 @@
     <string name="qr_code_instruction">Zeige diesen QR-Code den Teilnehmern</string>
     <string name="user_statistics">Benutzer Statistiken</string>
     <string name="no_users_yet">Noch keine Benutzer haben Stempel gesammelt</string>
+    <string name="settings">Einstellungen</string>
+    <string name="set_username">Name festlegen</string>
+    <string name="username_prompt">Dein Name:</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="username_updated">Name erfolgreich aktualisiert!</string>
+    <string name="username_update_failed">Fehler beim Aktualisieren des Namens</string>
+    <string name="username_empty">Bitte gib einen Namen ein</string>
 </resources>
