@@ -43,7 +43,7 @@
     <string name="username_updated">Name erfolgreich aktualisiert!</string>
     <string name="username_update_failed">Fehler beim Aktualisieren des Namens</string>
     <string name="username_empty">Bitte gib einen Namen ein</string>
-    <string name="oracle_placeholder">Klicke für eine Weisheit...</string>
+    <string name="oracle_placeholder">Klicke für eine Weisheit…</string>
     <string-array name="esoteric_wisdoms">
         <item>Der Kosmos ist in dir. Wir sind aus Sternenstaub gemacht.</item>
         <item>Folge dem Fluss des Universums, er kennt den Weg.</item>
