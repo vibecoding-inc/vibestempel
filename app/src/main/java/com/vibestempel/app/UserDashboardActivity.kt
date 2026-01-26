@@ -25,6 +25,7 @@ class UserDashboardActivity : AppCompatActivity() {
     private lateinit var stampsRecyclerView: RecyclerView
     private lateinit var noStampsText: TextView
     private lateinit var stampsCountText: TextView
+    private lateinit var oracleTextView: TextView
     
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -53,12 +54,18 @@ class UserDashboardActivity : AppCompatActivity() {
         stampsRecyclerView = findViewById(R.id.stampsRecyclerView)
         noStampsText = findViewById(R.id.noStampsText)
         stampsCountText = findViewById(R.id.stampsCountText)
+        oracleTextView = findViewById(R.id.oracleTextView)
         val scanButton = findViewById<Button>(R.id.scanButton)
         val backButton = findViewById<Button>(R.id.backButton)
         val settingsButton = findViewById<MaterialButton>(R.id.settingsButton)
         
         setupRecyclerView()
         updateStampsList()
+        showRandomWisdom()
+        
+        oracleTextView.setOnClickListener {
+            showRandomWisdom()
+        }
         
         scanButton.setOnClickListener {
             if (checkCameraPermission()) {
@@ -86,6 +93,14 @@ class UserDashboardActivity : AppCompatActivity() {
         stampsAdapter = StampsAdapter()
         stampsRecyclerView.layoutManager = LinearLayoutManager(this)
         stampsRecyclerView.adapter = stampsAdapter
+    }
+    
+    private fun showRandomWisdom() {
+        val wisdoms = resources.getStringArray(R.array.esoteric_wisdoms)
+        if (wisdoms.isNotEmpty()) {
+            val randomWisdom = wisdoms.random()
+            oracleTextView.text = randomWisdom
+        }
     }
     
     private fun updateStampsList() {
