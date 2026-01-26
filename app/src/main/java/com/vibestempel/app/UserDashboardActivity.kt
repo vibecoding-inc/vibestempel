@@ -97,8 +97,10 @@ class UserDashboardActivity : AppCompatActivity() {
     
     private fun showRandomWisdom() {
         val wisdoms = resources.getStringArray(R.array.esoteric_wisdoms)
-        val randomWisdom = wisdoms.random()
-        oracleTextView.text = randomWisdom
+        if (wisdoms.isNotEmpty()) {
+            val randomWisdom = wisdoms.random()
+            oracleTextView.text = randomWisdom
+        }
     }
     
     private fun updateStampsList() {
