@@ -43,4 +43,19 @@
     <string name="username_updated">Name erfolgreich aktualisiert!</string>
     <string name="username_update_failed">Fehler beim Aktualisieren des Namens</string>
     <string name="username_empty">Bitte gib einen Namen ein</string>
+    <string name="oracle_placeholder">Klicke für eine Weisheit...</string>
+    <string-array name="esoteric_wisdoms">
+        <item>Der Kosmos ist in dir. Wir sind aus Sternenstaub gemacht.</item>
+        <item>Folge dem Fluss des Universums, er kennt den Weg.</item>
+        <item>Deine Realität ist ein Spiegel deiner Seele.</item>
+        <item>Im Herzen des Chaos liegt die Stille der Wahrheit.</item>
+        <item>Die Kristalle flüstern die alten Geschichten der Erde.</item>
+        <item>Jeder Atemzug verbindet dich mit dem ewigen Rhythmus.</item>
+        <item>Das dritte Auge sieht nicht die Welt, sondern das Wesen.</item>
+        <item>Harmonie entsteht, wenn die Chakren im Einklang schwingen.</item>
+        <item>Achte auf die Zeichen, das Universum spricht ständig zu dir.</item>
+        <item>Negative Energie löst sich in positivem Licht auf.</item>
+        <item>Du bist ein Geist, der eine menschliche Erfahrung macht.</item>
+        <item>Die Aura, die du ausstrahlst, ist deine spirituelle Signatur.</item>
+    </string-array>
 </resources>
