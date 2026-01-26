@@ -75,6 +75,12 @@ class UserDashboardActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+
+        // Heimo's esoterischer Chakren-Check
+        stampsCountText.setOnClickListener {
+            val vibe = VibeChakraService.getRandomVibe()
+            Toast.makeText(this, vibe, Toast.LENGTH_LONG).show()
+        }
     }
     
     override fun onResume() {
